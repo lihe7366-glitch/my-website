@@ -173,6 +173,201 @@ footer{text-align:center;padding:35px;color:#bdb1e6}
 
 </div>
 
-<footer>© 2026 my w
+<footer>© 2026 my world · 在星空下遇见更好的自己 ✨</footer>
 
+<script>
+// 星空动画
+const canvas=document.getElementById("stars");
+const ctx=canvas.getContext("2d");
+let stars=[];
+function resize(){
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+  stars=Array.from({length:130},()=>({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*1.8,
+    a:Math.random()
+  }));
+}
+function drawStars(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  stars.forEach(s=>{
+    s.a+=0.015;
+    ctx.globalAlpha=0.4+Math.abs(Math.sin(s.a))*0.6;
+    ctx.fillStyle="white";
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fill();
+  });
+  ctx.globalAlpha=1;
+  requestAnimationFrame(drawStars);
+}
+resize();
+drawStars();
+window.addEventListener("resize",resize);
 
+// 音乐播放器
+const audio=document.getElementById("audio");
+const localFiles=document.getElementById("localFiles");
+const playlist=document.getElementById("playlist");
+const playBtn=document.getElementById("playBtn");
+const songName=document.getElementById("songName");
+const playStatus=document.getElementById("playStatus");
+const progress=document.getElementById("progress");
+const volume=document.getElementById("volume");
+
+let songs=[];
+let currentIndex=-1;
+let objectUrls=[];
+
+function addSong(name,url,isLocal=false){
+  songs.push({name,url,isLocal});
+  renderPlaylist();
+}
+
+localFiles.addEventListener("change",function(){
+  Array.from(this.files).forEach(file=>{
+    const url=URL.createObjectURL(file);
+    objectUrls.push(url);
+    addSong(file.name,url,true);
+  });
+  if(currentIndex===-1 && songs.length>0){
+    playSong(0);
+  }
+  this.value="";
+});
+
+function addOnlineSong(){
+  const name=document.getElementById("urlName").value.trim();
+  const url=document.getElementById("urlInput").value.trim();
+
+  if(!url){
+    alert("请先输入 MP3 音频链接！");
+    return;
+  }
+
+  try{
+    const parsed=new URL(url);
+    if(!["http:","https:"].includes(parsed.protocol)){
+      throw new Error("链接格式错误");
+    }
+  }catch(e){
+    alert("请输入有效的 HTTP 或 HTTPS 音频链接！");
+    return;
+  }
+
+  addSong(name||"网络音乐 "+(songs.length+1),url,false);
+  document.getElementById("urlName").value="";
+  document.getElementById("urlInput").value="";
+
+  if(currentIndex===-1) playSong(0);
+}
+
+function renderPlaylist(){
+  playlist.innerHTML="";
+  if(songs.length===0){
+    playlist.innerHTML='<p class="small">暂无歌曲</p>';
+    return;
+  }
+
+  songs.forEach((song,index)=>{
+    const item=document.createElement("div");
+    item.className="song-item";
+
+    const name=document.createElement("span");
+    name.textContent=(index===currentIndex?"🎵 ":"")+song.name;
+
+    const btn=document.createElement("button");
+    btn.textContent="播放";
+    btn.onclick=()=>playSong(index);
+
+    item.append(name,btn);
+    playlist.appendChild(item);
+  });
+}
+
+function playSong(index){
+  if(index<0||index>=songs.length)return;
+  currentIndex=index;
+  audio.src=songs[index].url;
+  songName.textContent=songs[index].name;
+  playStatus.textContent=songs[index].isLocal?"手机本地音乐":"网络音乐";
+  renderPlaylist();
+  audio.play().then(()=>{
+    playBtn.textContent="⏸ 暂停";
+  }).catch(()=>{
+    playStatus.textContent="播放失败，请检查音频文件或网络链接";
+    playBtn.textContent="▶ 播放";
+  });
+}
+
+function togglePlay(){
+  if(currentIndex===-1){
+    if(songs.length===0){
+      alert("请先添加本地音乐或网络音乐！");
+      return;
+    }
+    playSong(0);
+    return;
+  }
+  if(audio.paused){
+    audio.play().then(()=>playBtn.textContent="⏸ 暂停")
+      .catch(()=>playStatus.textContent="播放失败，请检查音频来源");
+  }else{
+    audio.pause();
+    playBtn.textContent="▶ 播放";
+  }
+}
+
+function previousSong(){
+  if(!songs.length)return;
+  playSong((currentIndex-1+songs.length)%songs.length);
+}
+
+function nextSong(){
+  if(!songs.length)return;
+  playSong((currentIndex+1)%songs.length);
+}
+
+audio.addEventListener("ended",nextSong);
+audio.addEventListener("play",()=>playBtn.textContent="⏸ 暂停");
+audio.addEventListener("pause",()=>playBtn.textContent="▶ 播放");
+
+audio.addEventListener("loadedmetadata",()=>{
+  progress.value=0;
+  document.getElementById("duration").textContent=formatTime(audio.duration);
+});
+
+audio.addEventListener("timeupdate",()=>{
+  if(audio.duration){
+    progress.value=audio.currentTime/audio.duration*100;
+  }
+  document.getElementById("currentTime").textContent=formatTime(audio.currentTime);
+});
+
+progress.addEventListener("input",()=>{
+  if(audio.duration){
+    audio.currentTime=progress.value/100*audio.duration;
+  }
+});
+
+volume.addEventListener("input",()=>{
+  audio.volume=Number(volume.value);
+});
+audio.volume=0.8;
+
+function formatTime(time){
+  if(!Number.isFinite(time))return "00:00";
+  const m=Math.floor(time/60);
+  const s=Math.floor(time%60);
+  return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+
+// 离开页面时释放本地音频资源
+window.addEventListener("beforeunload",()=>{
+  objectUrls.forEach(url=>URL.revokeObjectURL(url));
+});
+</script>
+</body>
+</html>
