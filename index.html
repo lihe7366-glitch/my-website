@@ -5,7 +5,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>my world | 星空个人主页</title>
-<style>
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}<style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{
   font-family:"Microsoft YaHei",sans-serif;
@@ -81,7 +87,9 @@ footer{text-align:center;padding:35px;color:#bdb1e6}
 <canvas id="stars"></canvas>
 
 <header>
-  <div class="avatar">🌌</div>
+  <div class="avatar">
+  <img src="avatar.jpg.jpg" alt="我的动漫头像">
+</div>
   <h1>my world</h1>
   <p class="subtitle">欢迎来到我的星空世界 ✨</p>
 </header>
