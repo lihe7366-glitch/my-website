@@ -3,43 +3,413 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>我的个人网站</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#10132f">
+<meta name="description" content="欢迎来到 my world，一个记录生活、学习与梦想的星空空间。">
+<title>my world | 星空幻想</title>
+
 <style>
-body {
-  margin: 0;
-  background: #f2f5fa;
-  font-family: Arial, sans-serif;
-  color: #333;
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+ background:#10132f;
+ color:#f4f0ff;
+ font-family:"Microsoft YaHei",Arial,sans-serif;
+ overflow-x:hidden;
+ min-height:100vh;
 }
-.container {
-  max-width: 650px;
-  margin: 100px auto;
-  padding: 35px;
-  background: white;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 5px 25px #0001;
+#sky{
+ position:fixed;inset:0;width:100%;height:100%;
+ z-index:-2;pointer-events:none;
 }
-h1 { color: #3867e8; }
-button {
-  padding: 12px 25px;
-  border: none;
-  border-radius: 8px;
-  background: #3867e8;
-  color: white;
+body:before{
+ content:"";position:fixed;inset:0;z-index:-3;
+ background:
+ radial-gradient(ellipse at 15% 20%,#423b9b 0%,transparent 45%),
+ radial-gradient(ellipse at 85% 70%,#39256e 0%,transparent 45%),
+ linear-gradient(135deg,#10132f,#171b45,#17102f);
+}
+header{
+ position:sticky;top:0;z-index:20;
+ background:#11142ee8;
+ backdrop-filter:blur(18px);
+ border-bottom:1px solid #a99bff30;
+}
+nav{
+ max-width:1100px;margin:auto;padding:16px 20px;
+ display:flex;align-items:center;justify-content:space-between;
+ gap:15px;flex-wrap:wrap;
+}
+.logo{
+ font-size:22px;font-weight:bold;
+ background:linear-gradient(90deg,#a9c8ff,#d6a8ff);
+ -webkit-background-clip:text;color:transparent;
+ letter-spacing:1px;
+}
+nav .links{display:flex;gap:18px;flex-wrap:wrap}
+nav a{
+ text-decoration:none;color:#d9d6f5;font-size:13px;
+ transition:.3s;
+}
+nav a:hover{color:#c6a5ff}
+.hero{
+ min-height:590px;display:flex;align-items:center;
+ justify-content:center;text-align:center;padding:65px 18px;
+}
+.hero-box{
+ width:100%;max-width:780px;padding:48px 20px;
+ background:linear-gradient(145deg,#ffffff13,#ffffff05);
+ border:1px solid #c2b5ff40;
+ border-radius:30px;
+ backdrop-filter:blur(15px);
+ box-shadow:0 20px 80px #0005,0 0 45px #8874ff18;
+}
+.avatar{
+ width:125px;height:125px;border-radius:50%;
+ margin:auto;display:grid;place-items:center;
+ font-size:65px;
+ background:linear-gradient(135deg,#8bc8ff,#9c8aff,#d3a3ff);
+ box-shadow:0 0 30px #8d8aff88,0 0 70px #7768ff44;
+ border:3px solid #ffffff90;
+ animation:float 4s ease-in-out infinite;
+}
+@keyframes float{
+ 0%,100%{transform:translateY(0)}
+ 50%{transform:translateY(-12px)}
+}
+.hero h1{
+ font-size:clamp(38px,8vw,60px);
+ margin:25px 0 12px;
+ background:linear-gradient(90deg,#a8d8ff,#c3a5ff,#f0c3ff);
+ -webkit-background-clip:text;color:transparent;
+}
+.hero p{color:#d0cbed;line-height:2;font-size:16px}
+.tags{margin-top:20px}
+.tag{
+ display:inline-block;margin:5px;padding:8px 15px;
+ border-radius:30px;background:#ffffff12;
+ border:1px solid #ffffff25;color:#d9ceff;
+ font-size:13px;
+}
+.btn{
+ display:inline-block;margin-top:22px;padding:13px 27px;
+ border-radius:30px;border:0;cursor:pointer;
+ color:#fff;text-decoration:none;font-weight:bold;
+ background:linear-gradient(100deg,#627df5,#a477f5,#c18bfa);
+ box-shadow:0 5px 25px #8377ff55;
+ transition:.3s;
+}
+.btn:hover{transform:translateY(-3px);box-shadow:0 8px 30px #9c8bff88}
+main{max-width:1050px;margin:auto;padding:0 20px}
+section{padding:55px 0;scroll-margin-top:85px}
+.section-title{
+ text-align:center;font-size:29px;margin-bottom:12px;
+ color:#d6c5ff;
+}
+.section-desc{
+ text-align:center;color:#aaa9d0;
+ font-size:14px;margin-bottom:27px;
+}
+.card{
+ background:linear-gradient(145deg,#ffffff12,#ffffff06);
+ border:1px solid #a89cff35;
+ border-radius:20px;padding:25px;
+ backdrop-filter:blur(12px);
+ box-shadow:0 12px 30px #0002;
+ transition:.3s;
+}
+.card:hover{transform:translateY(-5px);border-color:#bca5ff88}
+.card h3{color:#cbbaff;margin-bottom:13px}
+.card p{color:#c5c3e1;line-height:1.9;font-size:14px}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+ gap:18px;
+}
+.emoji{font-size:34px;margin-bottom:15px}
+.music-box{max-width:650px;margin:auto;text-align:center}
+input,textarea{
+ width:100%;padding:14px;margin:10px 0;
+ border-radius:12px;border:1px solid #ffffff30;
+ background:#ffffff12;color:white;outline:none;
+ font-size:14px;
+}
+input::placeholder,textarea::placeholder{color:#aaa5c7}
+audio{width:100%;margin-top:18px}
+.note{
+ border-left:3px solid #9d9bff;
+ background:#ffffff0c;padding:15px;
+ margin:15px 0;border-radius:8px;
+}
+footer{
+ text-align:center;padding:40px 15px;
+ color:#aaa7ca;font-size:13px;
+ border-top:1px solid #ffffff18;
+}
+footer p{margin:9px}
+footer a{color:#c9b4ff;text-decoration:none}
+@media(max-width:600px){
+ nav{justify-content:center}
+ nav .links{justify-content:center;gap:12px}
+ .hero{min-height:520px;padding:45px 15px}
+ .hero-box{padding:38px 15px}
+ .hero p{font-size:14px}
+ section{padding:42px 0}
+ .section-title{font-size:25px}
+ .card{padding:20px}
 }
 </style>
 </head>
+
 <body>
-<div class="container">
-  <h1>欢迎来到我的网站</h1>
-  <p>这是我的第一个个人网站！</p>
-  <p>这里将记录我的生活、学习和兴趣。</p>
-  <button onclick="alert('你好，欢迎访问！')">
-    点击我
-  </button>
+
+<canvas id="sky"></canvas>
+
+<header>
+<nav>
+ <div class="logo">🌌 my world</div>
+ <div class="links">
+  <a href="#about">关于我</a>
+  <a href="#works">作品</a>
+  <a href="#music">音乐</a>
+  <a href="#notes">笔记</a>
+  <a href="#contact">联系</a>
+ </div>
+</nav>
+</header>
+
+<div class="hero">
+ <div class="hero-box">
+  <div class="avatar">🌌</div>
+  <h1>Welcome to my world</h1>
+  <p>
+   ✨ 每个人都有属于自己的星空<br>
+   这里是我的小小宇宙，也是梦想开始的地方。<br>
+   在这里记录生活、学习、兴趣与成长。
+  </p>
+  <div class="tags">
+   <span class="tag">🌙 星空幻想</span>
+   <span class="tag">💻 技术探索</span>
+   <span class="tag">📚 持续学习</span>
+   <span class="tag">✨ 热爱生活</span>
+  </div>
+  <br>
+  <a href="#about" class="btn">探索我的世界 ↓</a>
+ </div>
 </div>
+
+<main>
+
+<section id="about">
+ <h2 class="section-title">🌙 关于我</h2>
+ <p class="section-desc">在浩瀚星空中，寻找属于自己的光</p>
+ <div class="card">
+  <h3>👋 Hello，欢迎来到 my world！</h3>
+  <p>
+   你好！这里是我的个人主页。
+   我喜欢动漫、互联网、编程和探索新鲜事物。
+   我希望在这里记录自己的学习历程，
+   展示自己的创意作品，也收藏生活中的美好瞬间。
+  </p>
+  <br>
+  <p>🌟 我的目标：不断学习，不断成长。</p>
+  <p>🌌 我的座右铭：即使星光微弱，也要努力发光。</p>
+ </div>
+</section>
+
+<section id="works">
+ <h2 class="section-title">🎨 我的作品</h2>
+ <p class="section-desc">每一次创作，都是一次新的探索</p>
+ <div class="grid">
+  <div class="card">
+   <div class="emoji">🌐</div>
+   <h3>个人网站</h3>
+   <p>使用 HTML、CSS 和 JavaScript 搭建的个人网站。</p>
+   <span class="tag">网页开发</span>
+  </div>
+  <div class="card">
+   <div class="emoji">💻</div>
+   <h3>编程项目</h3>
+   <p>记录编程练习、代码实验和有趣的小工具。</p>
+   <span class="tag">程序设计</span>
+  </div>
+  <div class="card">
+   <div class="emoji">🎮</div>
+   <h3>兴趣收藏</h3>
+   <p>收藏动漫、游戏、设计和喜欢的内容。</p>
+   <span class="tag">兴趣爱好</span>
+  </div>
+ </div>
+</section>
+
+<section id="music">
+ <h2 class="section-title">🎵 音乐空间</h2>
+ <p class="section-desc">让旋律在星空中流淌</p>
+ <div class="card music-box">
+  <div class="emoji">🎧</div>
+  <h3>My Music Player</h3>
+  <p>粘贴你有权使用的 MP3 音频直链，开启音乐之旅。</p>
+  <input id="musicUrl" type="url" placeholder="请输入 MP3 音频链接">
+  <button class="btn" onclick="loadMusic()">加载音乐</button>
+  <audio id="player" controls preload="none"></audio>
+  <p id="musicStatus">🌙 等待音乐加载……</p>
+ </div>
+</section>
+
+<section id="notes">
+ <h2 class="section-title">📚 学习笔记</h2>
+ <p class="section-desc">把知识变成自己的星光</p>
+ <div class="grid">
+  <div class="card">
+   <div class="emoji">📘</div>
+   <h3>编程学习</h3>
+   <p>HTML、CSS、JavaScript、Python 学习记录。</p>
+  </div>
+  <div class="card">
+   <div class="emoji">📐</div>
+   <h3>数学学习</h3>
+   <p>公式整理、重点知识和解题心得。</p>
+  </div>
+  <div class="card">
+   <div class="emoji">💡</div>
+   <h3>灵感收藏</h3>
+   <p>记录生活中有趣的想法和创意。</p>
+  </div>
+ </div>
+</section>
+
+<section id="contact">
+ <h2 class="section-title">💌 联系我</h2>
+ <p class="section-desc">星空很大，很高兴与你相遇</p>
+ <div class="card music-box">
+  <div class="emoji">🌠</div>
+  <h3>Let's keep in touch</h3>
+  <p>欢迎交流学习、技术和兴趣爱好。</p>
+  <p>📧 邮箱：请填写你的邮箱</p>
+  <p>🌙 感谢你来到我的世界！</p>
+ </div>
+</section>
+
+</main>
+
+<footer>
+ <p>🌌 © 2026 my world</p>
+ <p>Made with ❤️ and dreams</p>
+ <a href="#">返回星空顶部 ↑</a>
+</footer>
+
+<script>
+// 动态星空背景
+const canvas=document.getElementById("sky");
+const ctx=canvas.getContext("2d");
+let stars=[];
+let shootingStars=[];
+
+function resize(){
+ const dpr=Math.min(window.devicePixelRatio||1,2);
+ canvas.width=innerWidth*dpr;
+ canvas.height=innerHeight*dpr;
+ canvas.style.width=innerWidth+"px";
+ canvas.style.height=innerHeight+"px";
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+
+ stars=Array.from({length:Math.min(180,Math.floor(innerWidth/5))},()=>({
+  x:Math.random()*innerWidth,
+  y:Math.random()*innerHeight,
+  r:Math.random()*1.5+0.3,
+  alpha:Math.random(),
+  speed:Math.random()*0.015+0.004
+ }));
+}
+function draw(){
+ ctx.clearRect(0,0,innerWidth,innerHeight);
+
+ stars.forEach(s=>{
+  s.alpha+=s.speed;
+  if(s.alpha>1||s.alpha<0)s.speed*=-1;
+
+  ctx.fillStyle=`rgba(220,225,255,${Math.max(.15,Math.min(1,s.alpha))})`;
+  ctx.beginPath();
+  ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+  ctx.fill();
+ });
+
+ shootingStars.forEach((s,i)=>{
+  s.x+=s.vx;
+  s.y+=s.vy;
+  s.life--;
+
+  ctx.strokeStyle=`rgba(180,190,255,${s.life/60})`;
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(s.x,s.y);
+  ctx.lineTo(s.x-s.vx*8,s.y-s.vy*8);
+  ctx.stroke();
+
+  if(s.life<=0)shootingStars.splice(i,1);
+ });
+
+ if(Math.random()<0.008){
+  shootingStars.push({
+   x:Math.random()*innerWidth,
+   y:Math.random()*innerHeight*.5,
+   vx:4+Math.random()*3,
+   vy:2+Math.random()*2,
+   life:60
+  });
+ }
+
+ requestAnimationFrame(draw);
+}
+
+window.addEventListener("resize",resize);
+resize();
+draw();
+
+// 音乐播放器
+function loadMusic(){
+ const url=document.getElementById("musicUrl").value.trim();
+ const player=document.getElementById("player");
+ const status=document.getElementById("musicStatus");
+
+ if(!url){
+  status.textContent="请先填写音乐链接。";
+  return;
+ }
+
+ try{
+  const parsed=new URL(url);
+  if(!["http:","https:"].includes(parsed.protocol))throw Error();
+
+  player.src=parsed.href;
+  player.load();
+  status.textContent="音乐已加载，请点击播放按钮。";
+
+  player.play().then(()=>{
+   status.textContent="🎵 正在播放音乐……";
+  }).catch(()=>{
+   status.textContent="请点击播放器播放，或检查音频链接。";
+  });
+
+ }catch(e){
+  status.textContent="链接格式不正确，请检查。";
+ }
+}
+
+const player=document.getElementById("player");
+player.addEventListener("error",()=>{
+ document.getElementById("musicStatus").textContent=
+ "音乐加载失败，请检查音频地址或文件格式。";
+});
+player.addEventListener("ended",()=>{
+ document.getElementById("musicStatus").textContent="🌙 音乐播放结束。";
+});
+player.addEventListener("play",()=>{
+ document.getElementById("musicStatus").textContent="🎵 正在播放音乐……";
+});
+</script>
+
 </body>
 </html>
+
 
